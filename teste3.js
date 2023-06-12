@@ -1,15 +1,19 @@
-var data =  require("./fakeData");
+const { buscarUserPorId, deletarPorId } = require("./ServiceUser");
 
-module.exports = function(req, res) {
+
+function deletarUser(req, res) {
+  var id = req.body.idUserDeletar;
+  const userEncontrado = buscarUserPorId(id);
+
+  if (!userEncontrado) {
+    return res.status(404).json({ erro: "Usuário não encontrado" });
+  }
+
+  deletarPorId(userEncontrado.id)
   
-    var name =  req.query.name;
 
-    for(let i = 0; i < data.length;  i++) {
-        if(i.name == name) {
-            data[i] = null;
-        }
-    }
-
-    res.send("success");
-
+  return res.status(200).json({ mensagem: "Sucesso ao deletar!" });
+}
+module.exports = {
+  deletarUser,
 };
